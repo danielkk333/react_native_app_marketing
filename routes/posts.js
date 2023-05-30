@@ -24,7 +24,7 @@ router.post('/createPosts',verifyToken,async (req,res)=>{
 
 router.get('/getAllData',verifyToken, async(req,res) => {
   try {
-    const posts = await Posts.find()
+    const posts = await Posts.find().limit(10).sort({_id:-1})
     res.json({success:true,posts})
   } catch (e) {
     res.json(err.message)
