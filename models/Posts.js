@@ -59,7 +59,7 @@ const postsSchema = new mongoose.Schema({
     type:String,
   },
   gps:{
-    type:String,}
+    type:Object}
 },{timestamps:true})
 
 const Posts = mongoose.model('Posts',postsSchema)
