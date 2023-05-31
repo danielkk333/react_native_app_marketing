@@ -32,4 +32,16 @@ router.get('/getAllData',verifyToken, async(req,res) => {
 
 })
 
+router.post('/deletePosts/:id',verifyToken, async(req,res) => {
+  const id = req.params.id
+
+  const result = await Posts.findOne({_id:id})
+  if(result){
+    await Posts.deleteOne({_id:id})
+    res.json({success:true})
+  }else{
+    res.json({error:'could not delete',success:false})
+  }
+})
+
 module.exports = router
