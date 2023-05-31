@@ -16,7 +16,7 @@ const postsSchema = new mongoose.Schema({
   codeEnqueteur:{
     type:String
   },
-  nomEtude:{
+  dureeInterview:{
     type:String,
   },
   numQuestionnaire:{
