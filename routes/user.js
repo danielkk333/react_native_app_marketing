@@ -100,7 +100,7 @@ router.get('/profile',verifyToken, async(req,res)=>{
   }
 })
 
-router.get('/allUser',verifyToken, async(req,res)=>{
+router.get('/allUser', async(req,res)=>{
   const result = await User.find()
   if(result.length !== 0){
     res.json({success:true,result})
@@ -150,7 +150,7 @@ router.post('/suspendreUser',verifyToken,async (req,res) => {
   const user = await User.findOne({_id:id})
   if(user){
     await User.updateOne({_id:user._id},{$set:{adminVal:true}})
-    res.json({sucess:true,message:'Un user suspendu'})
+    res.json({success:true,message:'Un user suspendu'})
   }else{
     res.json({success:false,message:'erreur quelque part'})
   }
