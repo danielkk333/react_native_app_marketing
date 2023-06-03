@@ -66,7 +66,7 @@ router.post('/signin',async (req,res)=>{
   const {email, password} = req.body
 try{
     const savedUser = await User.findOne({email:email})
-    if(!savedUser && savedUser.adminVal === true){
+    if(!savedUser || savedUser.adminVal === true){
       return res.json({error:'Identifiant incorrect'})
     }else{
       try{
