@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const verifyToken = require('../middleware/verifyToken')
 const nodemailer = require("nodemailer");
+const mongoose = require('mongoose')
 
 // nodemailer
 async function mailer(recieveremail, code) {
@@ -62,10 +63,10 @@ router.post('/signup',async (req,res)=>{
 })
 
 router.post('/signin',async (req,res)=>{
-  const {email, password} =req.body
+  const {email, password} = req.body
 try{
     const savedUser = await User.findOne({email:email})
-    if(!savedUser){
+    if(!savedUser && savedUser.adminVal === true){
       return res.json({error:'Identifiant incorrect'})
     }else{
       try{
@@ -99,9 +100,14 @@ router.get('/profile',verifyToken, async(req,res)=>{
   }
 })
 
-router.get('/allUser', async(req,res)=>{
+router.get('/allUser',verifyToken, async(req,res)=>{
   const result = await User.find()
-  res.json(result)
+  if(result.length !== 0){
+    res.json({success:true,result})
+  }else{
+    res.json({success:false,message:'no data'})
+  }
+
 })
 
 router.post('/recuperation_password',async (req,res) => {
@@ -138,5 +144,16 @@ router.post('/creer_nouveau_password', async (req,res) => {
   }
 })
 
+router.post('/suspendreUser',verifyToken,async (req,res) => {
+  const id = req.body.id
+
+  const user = await User.findOne({_id:id})
+  if(user){
+    await User.updateOne({_id:user._id},{$set:{adminVal:true}})
+    res.json({sucess:true,message:'Un user suspendu'})
+  }else{
+    res.json({success:false,message:'erreur quelque part'})
+  }
+})
 
 module.exports = router

@@ -6,6 +6,7 @@ const cors = require('cors')
 env.config();
 const authRoutes = require('./routes/user')
 const postsRoutes = require('./routes/posts')
+const ejs = require('ejs')
 
 const port = process.env.PORT || 3000;
 
@@ -23,6 +24,8 @@ app.use(cors({
   methods:["POST","GET"]
 }))
 app.use(express.json());
+
+app.set("view engine", "ejs");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
