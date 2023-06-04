@@ -101,7 +101,7 @@ router.get('/profile',verifyToken, async(req,res)=>{
 })
 
 router.get('/allUser', async(req,res)=>{
-  const result = await User.find()
+  const result = await User.find({"name":{$ne:'admin'}})
   if(result.length !== 0){
     res.json({success:true,result})
   }else{
