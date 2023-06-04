@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
   adminVal:{
     type:Boolean,
     default:false
+  },
+  suspendre:{
+    type:Boolean,
+    default:false
   }
 })
 

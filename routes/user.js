@@ -66,7 +66,7 @@ router.post('/signin',async (req,res)=>{
   const {email, password} = req.body
 try{
     const savedUser = await User.findOne({email:email})
-    if(!savedUser || savedUser.adminVal === true){
+    if(!savedUser || savedUser.suspendre === true){
       return res.json({error:'Identifiant incorrect'})
     }else{
       try{
@@ -101,7 +101,7 @@ router.get('/profile',verifyToken, async(req,res)=>{
 })
 
 router.get('/allUser', async(req,res)=>{
-  const result = await User.find({"name":{$ne:'admin'}})
+  const result = await User.find({"name":{$ne:'admin'}}).sort({_id:-1})
   if(result.length !== 0){
     res.json({success:true,result})
   }else{
@@ -149,10 +149,22 @@ router.post('/suspendreUser',verifyToken,async (req,res) => {
 
   const user = await User.findOne({_id:id})
   if(user){
-    await User.updateOne({_id:user._id},{$set:{adminVal:true}})
+    await User.updateOne({_id:user._id},{$set:{suspendre:true}})
     res.json({success:true,message:'Un user suspendu'})
   }else{
     res.json({success:false,message:'erreur quelque part'})
+  }
+})
+
+router.post('/deleteUser/:id',verifyToken, async(req,res) => {
+  const id = req.params.id
+
+  const result = await User.findOne({_id:id})
+  if(result){
+    await User.deleteOne({_id:id})
+    res.json({success:true})
+  }else{
+    res.json({error:'could not delete',success:false})
   }
 })
 
