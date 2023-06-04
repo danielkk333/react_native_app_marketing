@@ -156,6 +156,18 @@ router.post('/suspendreUser',verifyToken,async (req,res) => {
   }
 })
 
+router.post('/grantSupendedUser',verifyToken,async (req,res) => {
+  const id = req.body.id
+
+  const user = await User.findOne({_id:id})
+  if(user){
+    await User.updateOne({_id:user._id},{$set:{suspendre:false}})
+    res.json({success:true,message:'Un user a été  sorti de suspension'})
+  }else{
+    res.json({success:false,message:'erreur quelque part'})
+  }
+})
+
 router.post('/deleteUser/:id',verifyToken, async(req,res) => {
   const id = req.params.id
 
