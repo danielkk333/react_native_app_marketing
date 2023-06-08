@@ -51,7 +51,7 @@ router.get('/deleteAll', async(req,res)=>{
   try{
     await Posts.deleteMany()
     res.json({success:true,message:'vous avez tout effacé'})
-  }catch(e)=>{
+  }catch(e){
     console.log(e.message);
     res.json({success:false})
   }
