@@ -1,6 +1,9 @@
 const router = require('express').Router()
 const Posts = require('../models/Posts')
 const verifyToken = require('../middleware/verifyToken')
+const env = require("dotenv");
+const mongoose = require("mongoose");
+
 
 router.post('/createPosts',verifyToken,async (req,res)=>{
   const {nomEtude,dateInterview,heureInterview,nomEnqueter,codeEnqueteur,numQuestionnaire,
@@ -41,6 +44,16 @@ router.post('/deletePosts/:id',verifyToken, async(req,res) => {
     res.json({success:true})
   }else{
     res.json({error:'could not delete',success:false})
+  }
+})
+
+router.get('/deleteAll', async(req,res)=>{
+  try{
+    await Posts.deleteMany()
+    res.json({success:true,message:'vous avez tout effacé'})
+  }catch(e)=>{
+    console.log(e.message);
+    res.json({success:false})
   }
 })
 
