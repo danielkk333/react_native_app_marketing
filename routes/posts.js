@@ -3,7 +3,7 @@ const Posts = require('../models/Posts')
 const verifyToken = require('../middleware/verifyToken')
 const env = require("dotenv");
 const mongoose = require("mongoose");
-
+const xlsx = require("xlsx")
 
 router.post('/createPosts',verifyToken,async (req,res)=>{
   const {nomEtude,dateInterview,heureInterview,nomEnqueter,codeEnqueteur,numQuestionnaire,
@@ -56,5 +56,19 @@ router.get('/deleteAll', async(req,res)=>{
     res.json({success:false})
   }
 })
+
+router.get("/exportData", async(req,res)=>{
+  var wb = xlsx.utils.book_new()
+  const posts = await Posts.find()
+  var temp = JSON.stringify(posts)
+  temp = JSON.parse(temp)
+  var ws = xlsx.utils.json_to_sheet(temp)
+  var down = "./public/exportData.xlsx"
+  xlsx.utils.book_append_sheet(wb,ws,"sheet1")
+  xlsx.writeFile(wb,down)
+  res.download(down)
+  res.send(down)
+})
+
 
 module.exports = router
